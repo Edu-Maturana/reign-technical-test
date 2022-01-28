@@ -1,27 +1,20 @@
 import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
-import { Client } from 'pg';
 import { ScheduleModule } from '@nestjs/schedule';
-import { ArticlesController } from './controllers/articles.controller';
-import { ArticlesService } from './services/articles.service';
 import { DatabaseModule } from './database/database.module';
 
-const client = new Client({
-  user: 'root',
-  host: 'localhost',
-  database: 'my_db',
-  password: '123456',
-  port: 5432,
-});
-
-client.connect();
-client.query('SELECT NOW()', (err, res) => {
-  console.log(err, res);
-  client.end();
-});
+import { ArticlesController } from './controllers/articles.controller';
+import { ArticlesService } from './services/articles.service';
+import { Article } from './entities/article.entity';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
-  imports: [HttpModule, ScheduleModule.forRoot(), DatabaseModule],
+  imports: [
+    HttpModule,
+    ScheduleModule.forRoot(),
+    DatabaseModule,
+    TypeOrmModule.forFeature([Article]),
+  ],
   controllers: [ArticlesController],
   providers: [ArticlesService],
 })
