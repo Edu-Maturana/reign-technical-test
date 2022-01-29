@@ -16,8 +16,12 @@ export class ArticlesController {
     @Query('author') author: string,
     @Query('_tags') _tags: string,
     @Query('title') title: string,
-    @Query('month') month: string,
   ) {
-    return await this.articlesService.getArticles(author, _tags, title, month);
+    return await this.articlesService.getArticles(author, _tags, title);
+  }
+
+  @Get('search')
+  async searchByMonth(@Query('month') month: string) {
+    return await this.articlesService.searchByMonth(month);
   }
 }

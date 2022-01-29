@@ -42,12 +42,7 @@ export class ArticlesService {
       });
   }
 
-  async getArticles(
-    author: string,
-    _tags: string,
-    title: string,
-    //  month: string,
-  ) {
+  async getArticles(author: string, _tags: string, title: string) {
     const where = {};
 
     if (author) {
@@ -59,9 +54,6 @@ export class ArticlesService {
     if (title) {
       where['title'] = title;
     }
-    // if (month) {
-    //   where['created_at'] = `%${month}%`;
-    // }
     return await this.articleRepository.find({
       take: 5,
       where,
@@ -69,5 +61,12 @@ export class ArticlesService {
         created_at: 'DESC',
       },
     });
+  }
+
+  async searchByMonth(month: string) {
+    return await this.articleRepository
+      .createQueryBuilder('article')
+      .where('created_at LIKE :month', { month: `%${month}%` })
+      .getMany();
   }
 }

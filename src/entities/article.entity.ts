@@ -1,4 +1,4 @@
-import { PrimaryColumn, Column, Entity } from 'typeorm';
+import { PrimaryColumn, Column, Entity, Index } from 'typeorm';
 import { Transform } from 'class-transformer';
 
 @Entity()
@@ -15,6 +15,7 @@ export class Article {
   @Column({ type: 'jsonb' })
   _tags: string[];
 
+  @Index({ fulltext: true })
   @Column({ type: 'varchar', length: 255 })
   created_at: Date;
 }
